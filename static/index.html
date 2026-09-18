@@ -26,7 +26,7 @@
     <section class="panel input-panel">
       <h2>运输与箱体参数</h2>
       <div class="grid-4">
-        <label>运输时长 (h)
+        <label id="transportHoursField">运输时长 (h)
           <input id="transportHours" type="number" min="0" step="0.5" value="24" />
         </label>
         <label>单箱容量
@@ -40,17 +40,33 @@
         </label>
       </div>
 
-      <div class="section-head">
-        <h2>允许温区</h2>
-        <button id="btnAddZone" type="button" class="btn btn-small">+ 添加温区</button>
+      <label class="seg-toggle">
+        <input type="checkbox" id="useSegments" />
+        启用分段运输:按顺序维护各运输段的时长与可用温区,规划时逐段校验
+        <small>(总运输时长 = 各段时长之和)</small>
+      </label>
+
+      <div id="singleZoneSection">
+        <div class="section-head">
+          <h2>允许温区</h2>
+          <button id="btnAddZone" type="button" class="btn btn-small">+ 添加温区</button>
+        </div>
+        <div class="table-wrap">
+          <table class="editable">
+            <thead>
+              <tr><th>温区名称</th><th>下限 ℃</th><th>上限 ℃</th><th></th></tr>
+            </thead>
+            <tbody id="zoneRows"></tbody>
+          </table>
+        </div>
       </div>
-      <div class="table-wrap">
-        <table class="editable">
-          <thead>
-            <tr><th>温区名称</th><th>下限 ℃</th><th>上限 ℃</th><th></th></tr>
-          </thead>
-          <tbody id="zoneRows"></tbody>
-        </table>
+
+      <div id="segmentSection" hidden>
+        <div class="section-head">
+          <h2>运输段 <small class="muted">(按执行顺序)</small></h2>
+          <button id="btnAddSegment" type="button" class="btn btn-small">+ 添加运输段</button>
+        </div>
+        <div id="segmentList"></div>
       </div>
 
       <div class="section-head">

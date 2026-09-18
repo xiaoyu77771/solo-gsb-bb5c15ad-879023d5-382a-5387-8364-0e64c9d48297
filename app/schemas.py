@@ -10,6 +10,14 @@ class ZoneIn(BaseModel):
     t_max: float = Field(..., description="温区上限 ℃")
 
 
+class SegmentIn(BaseModel):
+    name: str | None = Field(
+        None, description="运输段名称,如:干线运输;留空自动按顺序命名"
+    )
+    hours: float = Field(..., gt=0, description="该段运输时长(小时)")
+    zones: list[ZoneIn] = Field(..., min_length=1, description="该段可用温区列表")
+
+
 class CargoIn(BaseModel):
     name: str = Field(..., description="货物批次名称")
     units: int = Field(..., gt=0, description="件数(拆分的最小单位)")
@@ -22,9 +30,22 @@ class CargoIn(BaseModel):
 
 
 class PlanRequest(BaseModel):
-    transport_hours: float = Field(..., ge=0, description="运输时长(小时)")
+    transport_hours: float | None = Field(
+        None,
+        ge=0,
+        description="运输时长(小时);分段模式下可省略,默认取各段时长之和,"
+        "若填写则必须与各段时长之和一致",
+    )
     box_capacity: float = Field(..., gt=0, description="单个箱体容量(体积单位)")
     max_boxes: int = Field(100, gt=0, description="最多使用的箱子数量")
     volume_unit: str = Field("m³", description="体积单位名称,仅用于展示")
-    zones: list[ZoneIn] = Field(..., min_length=1, description="可用温区列表")
+    zones: list[ZoneIn] = Field(
+        default_factory=list,
+        description="全程单一可用温区列表;未提供 segments 时至少需要一个",
+    )
+    segments: list[SegmentIn] = Field(
+        default_factory=list,
+        description="按顺序维护的运输段(名称/时长/可用温区);"
+        "提供后启用分段温区校验,并忽略 zones",
+    )
     cargoes: list[CargoIn] = Field(..., min_length=1, description="货物批次列表")

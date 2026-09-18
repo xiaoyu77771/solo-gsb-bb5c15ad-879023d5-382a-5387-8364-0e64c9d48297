@@ -97,6 +97,61 @@ body {
 }
 .section-head h2 { margin: 0; }
 
+/* ---------- 分段运输 ---------- */
+.seg-toggle {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 9px 12px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  background: #fafcfe;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.seg-toggle input { width: auto; accent-color: var(--blue); }
+.seg-toggle small { color: var(--muted); font-weight: 400; }
+
+.field-disabled { opacity: 0.45; }
+.field-disabled input { background: #f1f4f8; }
+
+#segmentList { display: flex; flex-direction: column; gap: 12px; }
+.segment-card {
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--blue);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fafcfe;
+}
+.segment-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.seg-no {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--blue-dark);
+  background: var(--ice);
+  border-radius: 6px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.segment-head .seg-name { flex: 1 1 140px; }
+.seg-hours-label {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.seg-hours-label input { width: 90px; }
+.segment-card .btn-add-seg-zone { margin-top: 6px; }
+
 /* ---------- 输入控件 ---------- */
 .grid-4 {
   display: grid;
@@ -215,6 +270,45 @@ table.items tr:last-child td { padding-bottom: 10px; }
 }
 .unloaded-item .u-title { font-weight: 700; color: var(--err); font-size: 13.5px; }
 .unloaded-item .u-reason { margin-top: 3px; font-size: 13px; }
+
+.seg-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid #e8c2bf;
+  color: var(--err);
+  font-size: 11.5px;
+  font-weight: 600;
+  vertical-align: 1px;
+}
+
+/* ---------- 逐段校验表 ---------- */
+table.seg-checks {
+  width: calc(100% - 28px);
+  border-collapse: collapse;
+  margin: 8px 14px 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 12.5px;
+}
+table.seg-checks th, table.seg-checks td {
+  text-align: left;
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--line);
+}
+table.seg-checks th {
+  background: #f4f8fc;
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+table.seg-checks tr:last-child td { border-bottom: none; }
+table.seg-checks tr.seg-ok td:first-child { color: var(--ok); font-weight: 700; }
+table.seg-checks tr.seg-bad td { background: var(--err-bg); }
+table.seg-checks tr.seg-bad td:first-child { color: var(--err); font-weight: 700; }
 
 .error-box {
   margin-top: 14px;
