@@ -12,7 +12,7 @@
       <span class="logo">❄</span>
       <div>
         <h1>冷链装箱温控规划器</h1>
-        <p>按温区兼容与容量约束自动生成分箱方案</p>
+        <p>按分段温区兼容与容量约束自动生成分箱方案</p>
       </div>
     </div>
     <div class="actions">
@@ -26,7 +26,7 @@
     <section class="panel input-panel">
       <h2>运输与箱体参数</h2>
       <div class="grid-4">
-        <label>运输时长 (h)
+        <label id="transportHoursLabel">运输时长 (h)
           <input id="transportHours" type="number" min="0" step="0.5" value="24" />
         </label>
         <label>单箱容量
@@ -40,17 +40,37 @@
         </label>
       </div>
 
-      <div class="section-head">
-        <h2>允许温区</h2>
-        <button id="btnAddZone" type="button" class="btn btn-small">+ 添加温区</button>
+      <div class="mode-bar">
+        <label class="switch-line">
+          <input type="checkbox" id="segMode" />
+          <span>启用<strong>分段运输</strong>：按顺序维护各运输段的名称、时长与该段可用温区，规划时逐段校验共同允许温度</span>
+        </label>
+        <span id="segTotalHint" class="seg-hint" hidden></span>
       </div>
-      <div class="table-wrap">
-        <table class="editable">
-          <thead>
-            <tr><th>温区名称</th><th>下限 ℃</th><th>上限 ℃</th><th></th></tr>
-          </thead>
-          <tbody id="zoneRows"></tbody>
-        </table>
+
+      <!-- 单温区模式(旧版兼容) -->
+      <div id="singleZoneBox">
+        <div class="section-head">
+          <h2>允许温区</h2>
+          <button id="btnAddZone" type="button" class="btn btn-small">+ 添加温区</button>
+        </div>
+        <div class="table-wrap">
+          <table class="editable">
+            <thead>
+              <tr><th>温区名称</th><th>下限 ℃</th><th>上限 ℃</th><th></th></tr>
+            </thead>
+            <tbody id="zoneRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 分段运输模式 -->
+      <div id="segmentBox" hidden>
+        <div class="section-head">
+          <h2>运输段（按运输先后顺序）</h2>
+          <button id="btnAddSegment" type="button" class="btn btn-small">+ 添加运输段</button>
+        </div>
+        <div id="segmentList" class="segment-list"></div>
       </div>
 
       <div class="section-head">
@@ -83,6 +103,9 @@
 
         <h3>分箱方案 <span id="boxCount" class="muted"></span></h3>
         <div id="boxes" class="box-list"></div>
+
+        <h3 id="segFailTitle" class="conflict-title" hidden>分段温区不兼容报告（首次不兼容的运输段）</h3>
+        <div id="segmentFailures" class="unloaded-list"></div>
 
         <h3 id="unloadedTitle" class="conflict-title" hidden>未能装载的货物与冲突原因</h3>
         <div id="unloaded" class="unloaded-list"></div>
